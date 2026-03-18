@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PeterSupportHub</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:'Segoe UI', sans-serif; background:#f4f4f4; color:#333; }
+header { position: relative; width:100%; height:300px; background:url('banner.jpg') center/contain no-repeat; display:flex; align-items:center; justify-content:center; color:white; overflow:hidden;}
+header::after { content:''; position:absolute; top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.2);}
+header h1 { font-size:2.5rem; text-align:center; text-shadow:2px 2px 10px rgba(0,0,0,0.6);}
+
+nav { display:flex; gap:15px; justify-content:center; padding:20px; flex-wrap:wrap; }
+nav a { color:white; padding:12px 20px; border-radius:8px; text-decoration:none; background:linear-gradient(135deg,#e67e22,#d35400); box-shadow:0 5px 0 #b44d0c,0 5px 15px rgba(0,0,0,0.3); transition: all 0.2s ease;}
+nav a.green-button { background:linear-gradient(135deg,#2ecc71,#27ae60); box-shadow:0 5px 0 #1c8050,0 5px 15px rgba(0,0,0,0.3);}
+nav a:hover { transform:translateY(-2px); box-shadow:0 3px 0 #b44d0c,0 8px 15px rgba(0,0,0,0.3);}
+nav a.green-button:hover { transform:translateY(-2px); box-shadow:0 3px 0 #1c8050,0 8px 15px rgba(0,0,0,0.3);}
+
+/* Tool Buttons */
+.tool-button { display:block; width:80%; max-width:400px; margin:15px auto; padding:18px; font-size:1.2rem; font-weight:bold; color:white; background:linear-gradient(135deg,#e67e22,#d35400); border:none; border-radius:15px; box-shadow:0 5px 0 #b44d0c,0 5px 15px rgba(0,0,0,0.2); transition: all 0.2s ease; cursor:pointer;}
+.tool-button:hover { transform:translateY(-2px); box-shadow:0 3px 0 #b44d0c,0 8px 15px rgba(0,0,0,0.2); }
+
+.tool-section { display:none; padding:30px; max-width:900px; margin:20px auto; background:#fff; border-radius:12px; box-shadow:0 6px 15px rgba(0,0,0,0.1); }
+textarea, input[type=text], input[type=file], select { width:100%; margin-bottom:10px; padding:8px; border-radius:6px; border:1px solid #ccc; }
+button { cursor:pointer; border:none; border-radius:8px; padding:10px; color:white; background:#e67e22; margin-bottom:5px; }
+button:hover { background:#d35400; }
+</style>
+</head>
+<body>
+
+<header><h1>PeterSupportHub</h1></header>
+
+<nav>
+<a href="https://www.teamviewer.com/nl/solutions/use-cases/quicksupport/" target="_blank">TeamViewer QuickSupport</a>
+<a href="https://remotedesktop.google.com/support/" target="_blank">Chrome Remote Desktop</a>
+<a href="mailto:debackerpeter@gmail.com">E‑mail</a>
+<a href="https://e.pcloud.link/publink/show?code=kZU3JNZ9oWr3FxCbTSHQKHQXGj2JbOFVgYV" target="_blank" class="green-button">pCloud DOWNLOADZONE</a>
+<a href="https://e.pcloud.link/publink/show?code=kZJ9MAZ3mOqvfUaYYzYM2Kd0ajnmY2uRF0V" target="_blank" class="green-button">pCloud Software bestanden</a>
+</nav>
+
+<!-- Tool Buttons -->
+<button class="tool-button" data-target="ai-prompt-generator">AI Prompt Generator</button>
+<button class="tool-button" data-target="image-bg-remover">Advanced Image Background Remover</button>
+<button class="tool-button" data-target="youtube-thumbnail-analyzer">YouTube Thumbnail Analyzer</button>
+<button class="tool-button" data-target="batch-file-formatter">Batch File Formatter / Cleaner</button>
+<button class="tool-button" data-target="custom-qr-designer">Custom QR Code Designer</button>
+
+<!-- AI Prompt Generator -->
+<div id="ai-prompt-generator" class="tool-section">
+<h2>AI Prompt Generator</h2>
+<label>Kies AI-model:</label>
+<select id="ai-model">
+<option>ChatGPT</option>
+<option>GPT‑4 Turbo</option>
+<option>GPT‑4</option>
+<option>GPT‑3.5</option>
+<option>DALL‑E</option>
+<option>Stable Diffusion</option>
+<option>MidJourney</option>
+<option>Bard AI</option>
+<option>LLaMA</option>
+<option>MPT</option>
+<option>Cohere</option>
+<option>Claude AI</option>
+</select>
+
+<label>Kies type content:</label>
+<select id="content-type">
+<option>Blog</option>
+<option>Social Media</option>
+<option>Artwork</option>
+<option>Video Script</option>
+<option>Email</option>
+<option>Product Description</option>
+<option>Story / Fiction</option>
+<option>Technical Document</option>
+<option>Marketing Copy</option>
+<option>Ad Copy</option>
+</select>
+
+<label>Onderwerp(en) (één per regel):</label>
+<textarea id="topic" placeholder="Typ elk onderwerp op een nieuwe regel"></textarea>
+<button id="generate-prompt">Genereer Prompt</button>
+<textarea id="prompt-output" readonly style="height:120px;"></textarea>
+<button id="copy-prompt">Kopieer</button>
+</div>
+
+<!-- Advanced Image Background Remover -->
+<div id="image-bg-remover" class="tool-section">
+<h2>Advanced Image Background Remover</h2>
+<input type="file" id="bg-file" accept="image/*"><br>
+<canvas id="bg-canvas" style="max-width:100%; border:1px solid #ccc;"></canvas>
+</div>
+
+<!-- YouTube Thumbnail Analyzer -->
+<div id="youtube-thumbnail-analyzer" class="tool-section">
+<h2>YouTube Thumbnail Analyzer</h2>
+<input type="file" id="thumb-file" accept="image/*"><br>
+<input type="text" id="thumb-text" placeholder="Overlay tekst"><br>
+<canvas id="thumb-canvas" style="max-width:100%; border:1px solid #ccc;"></canvas>
+<div id="thumb-analysis"></div>
+</div>
+
+<!-- Batch File Formatter / Cleaner -->
+<div id="batch-file-formatter" class="tool-section">
+<h2>Batch File Formatter / Cleaner</h2>
+<input type="file" id="batch-file" accept=".txt,.csv,.json"><br>
+<label>Zoekpatroon (Regex):</label><input type="text" id="regex-search"><br>
+<label>Vervang door:</label><input type="text" id="regex-replace"><br>
+<button id="apply-regex">Toepassen Regex</button>
+<textarea id="file-preview" placeholder="Preview verschijnt hier..." readonly></textarea>
+<button id="download-file">Download Bestand</button>
+</div>
+
+<!-- Custom QR Code Designer -->
+<div id="custom-qr-designer" class="tool-section">
+<h2>Custom QR Code Designer</h2>
+<input type="text" id="qr-text" placeholder="QR inhoud"><br>
+<input type="color" id="qr-color" value="#000000"><br>
+<button id="generate-qr">Genereer QR</button>
+<div id="qr-result"></div>
+</div>
+
+<footer>© 2026 PeterSupportHub</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+// Toggle tool-sections
+document.querySelectorAll('.tool-button').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+        document.querySelectorAll('.tool-section').forEach(s=>s.style.display='none');
+        document.getElementById(btn.dataset.target).style.display='block';
+    });
+});
+
+// AI Prompt Generator
+document.getElementById('generate-prompt').addEventListener('click',()=>{
+    const type=document.getElementById('content-type').value;
+    const model=document.getElementById('ai-model').value;
+    const lines=document.getElementById('topic').value.split('\n').filter(l=>l.trim());
+    const prompts = lines.map(t=>`Prompt voor ${type}: "${t}" [Model: ${model}]`).join('\n\n---\n\n');
+    document.getElementById('prompt-output').value = prompts;
+});
+document.getElementById('copy-prompt').addEventListener('click',()=>navigator.clipboard.writeText(document.getElementById('prompt-output').value));
+
+// Advanced BG Remover
+document.getElementById('bg-file').addEventListener('change', async e=>{
+    const file=e.target.files[0]; if(!file) return;
+    const canvas=document.getElementById('bg-canvas'); const ctx=canvas.getContext('2d');
+    const img=new Image(); img.onload=()=>{canvas.width=img.width; canvas.height=img.height; ctx.drawImage(img,0,0);}
+    img.src=URL.createObjectURL(file);
+
+    const formData=new FormData(); formData.append("image_file", file);
+    const apiKey="AimXWNzWnLUJjfLirrhZnkCd";
+    try{
+        const resp=await fetch("https://api.remove.bg/v1.0/removebg",{method:"POST",headers:{"X-Api-Key":apiKey},body:formData});
+        if(!resp.ok) throw new Error("API error");
+        const blob=await resp.blob(); const resultImg=new Image();
+        resultImg.onload=()=>{canvas.width=resultImg.width; canvas.height=resultImg.height; ctx.drawImage(resultImg,0,0);}
+        resultImg.src=URL.createObjectURL(blob);
+    } catch(err){ alert("Fout bij verwijderen achtergrond: "+err.message);}
+});
+
+// YouTube Thumbnail Analyzer
+const thumbFileInput=document.getElementById('thumb-file');
+const thumbCanvas=document.getElementById('thumb-canvas');
+const thumbCtx=thumbCanvas.getContext('2d');
+const thumbTextInput=document.getElementById('thumb-text');
+const thumbAnalysis=document.getElementById('thumb-analysis');
+
+thumbFileInput.addEventListener('change', e=>{
+    const file=e.target.files[0]; if(!file) return;
+    const img=new Image();
+    img.onload=()=>{
+        thumbCanvas.width=img.width; thumbCanvas.height=img.height; thumbCtx.drawImage(img,0,0);
+        drawOverlay(); analyzeThumbnail();
+    };
+    img.src=URL.createObjectURL(file);
+});
+
+thumbTextInput.addEventListener('input', drawOverlay);
+
+function drawOverlay(){
+    if(!thumbCanvas.width) return;
+    const text=thumbTextInput.value; thumbCtx.clearRect(0,0,thumbCanvas.width,thumbCanvas.height);
+    thumbCtx.drawImage(thumbCanvas,0,0);
+    if(text){ thumbCtx.font="bold 40px Arial"; thumbCtx.fillStyle="rgba(255,255,255,0.8)"; thumbCtx.strokeStyle="black"; thumbCtx.lineWidth=3;
+    thumbCtx.textAlign="center"; thumbCtx.textBaseline="top"; thumbCtx.strokeText(text,thumbCanvas.width/2,10); thumbCtx.fillText(text,thumbCanvas.width/2,10);}
+}
+function analyzeThumbnail(){
+    const imgData=thumbCtx.getImageData(0,0,thumbCanvas.width,thumbCanvas.height);
+    const data=imgData.data; let r=0,g=0,b=0; let total=data.length/4;
+    for(let i=0;i<data.length;i+=4){r+=data[i]; g+=data[i+1]; b+=data[i+2];}
+    r=Math.round(r/total); g=Math.round(g/total); b=Math.round(b/total);
+    const lum=Math.round(0.2126*r+0.7152*g+0.0722*b);
+    thumbAnalysis.innerHTML=`<strong>Thumbnail Analyse:</strong><br>Gemiddelde kleur: rgb(${r},${g},${b})<br>Gemiddelde helderheid: ${lum} (${lum<128?"donker":"licht"})<br>Contrastadvies: ${lum<128?"Gebruik lichte tekst":"Gebruik donkere tekst"}`;
+}
+
+// Batch Formatter / Cleaner
+let batchOriginal=''; let currentFileName='';
+const batchFileInput=document.getElementById('batch-file');
+const preview=document.getElementById('file-preview');
+
+function autoCleanText(txt){
+    txt = txt.replace(/\r\n/g,'\n')
+             .replace(/\t/g,'  ')
+             .split('\n').map(l=>l.trim()).join('\n')
+             .replace(/\n{2,}/g,'\n\n')
+             .replace(/ +/g,' ');
+    try{ const j = JSON.parse(txt); txt=JSON.stringify(j,null,2);}catch{}
+    return txt;
+}
+
+batchFileInput.addEventListener('change', e=>{
+    const file = e.target.files[0]; if(!file) return;
+    currentFileName = file.name;
+    const reader = new FileReader();
+    reader.onload = ev=>{
+        batchOriginal = ev.target.result;
+        preview.value = autoCleanText(batchOriginal);
+        preview.readOnly = false;
+    }
+    reader.readAsText(file);
+});
+
+document.getElementById('apply-regex').addEventListener('click', ()=>{
+    const search=document.getElementById('regex-search').value;
+    const replace=document.getElementById('regex-replace').value;
+    if(!search) return;
+    try{ const re = new RegExp(search,'g'); preview.value = preview.value.replace(re,replace);} 
+    catch(err){alert("Regex fout: "+err.message);}
+});
+
+document.getElementById('download-file').addEventListener('click', ()=>{
+    const blob = new Blob([preview.value],{type:'text/plain'});
+    const link = document.createElement('a'); link.href = URL.createObjectURL(blob);
+    const ext = currentFileName.split('.').pop();
+    const name = currentFileName.split('.').slice(0,-1).join('_cleaned.')+'.'+ext;
+    link.download = name; link.click();
+});
+
+// QR Code Designer
+document.getElementById('generate-qr').addEventListener('click', ()=>{
+    const container=document.getElementById('qr-result'); container.innerHTML='';
+    new QRCode(container,{text:document.getElementById('qr-text').value,width:200,height:200,colorDark:document.getElementById('qr-color').value,colorLight:"#ffffff"});
+});
+</script>
+</body>
+</html>
