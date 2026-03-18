@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PeterSupportHub</title>
+
+<style>
+
+body{
+font-family:Segoe UI,Arial;
+background:#f4f4f4;
+margin:0;
+}
+
+header{
+height:260px;
+background:url('banner.jpg') center/contain no-repeat;
+}
+
+nav{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:10px;
+padding:20px;
+}
+
+nav a{
+color:white;
+padding:12px 20px;
+border-radius:8px;
+text-decoration:none;
+background:linear-gradient(135deg,#2ecc71,#27ae60);
+box-shadow:0 6px 0 #1e8449;
+font-weight:bold;
+}
+
+nav a:hover{
+transform:translateY(2px);
+box-shadow:0 4px 0 #1e8449;
+}
+
+.tool-button{
+display:block;
+width:80%;
+max-width:420px;
+margin:12px auto;
+padding:16px;
+font-size:18px;
+font-weight:bold;
+color:white;
+background:linear-gradient(135deg,#e67e22,#d35400);
+border:none;
+border-radius:12px;
+box-shadow:0 6px 0 #a04000;
+cursor:pointer;
+}
+
+.tool-section{
+display:none;
+padding:20px;
+margin:20px auto;
+max-width:900px;
+background:white;
+border-radius:10px;
+}
+
+textarea,input,select{
+width:100%;
+padding:10px;
+margin-bottom:10px;
+}
+
+canvas{
+max-width:100%;
+border:1px solid #ccc;
+}
+
+</style>
+</head>
+
+<body>
+
+<header></header>
+
+<nav>
+
+<a href="https://www.teamviewer.com/nl/solutions/use-cases/quicksupport/" target="_blank">TeamViewer</a>
+
+<a href="https://remotedesktop.google.com/support/" target="_blank">Chrome Remote Desktop</a>
+
+<a href="mailto:debackerpeter@gmail.com">Email</a>
+
+<a href="https://e.pcloud.link/publink/show?code=kZU3JNZ9oWr3FxCbTSHQKHQXGj2JbOFVgYV" target="_blank">pCloud Downloadzone</a>
+
+<a href="https://e.pcloud.link/publink/show?code=kZJ9MAZ3mOqvfUaYYzYM2Kd0ajnmY2uRF0V" target="_blank">pCloud Software</a>
+
+</nav>
+
+
+<button class="tool-button" data-target="prompt">AI Prompt Generator</button>
+<button class="tool-button" data-target="thumbnail">YouTube Thumbnail Analyzer</button>
+<button class="tool-button" data-target="batch">Batch File Formatter / Cleaner</button>
+<button class="tool-button" data-target="bgremover">Advanced Image Background Remover</button>
+<button class="tool-button" data-target="qr">Custom QR Code Designer</button>
+
+
+<!-- AI PROMPT GENERATOR -->
+
+<div id="prompt" class="tool-section">
+
+<h2>AI Prompt Generator</h2>
+
+<label>Kies AI-model</label>
+<select id="aiModel">
+<option>ChatGPT</option>
+<option>GPT-4</option>
+<option>Claude</option>
+<option>Gemini</option>
+<option>Midjourney</option>
+<option>DALL-E</option>
+<option>Stable Diffusion</option>
+</select>
+
+<label>Kies type content</label>
+<select id="contentType">
+<option>Blog</option>
+<option>Artikel</option>
+<option>Marketing tekst</option>
+<option>Social Media Post</option>
+<option>YouTube Script</option>
+<option>Artwork</option>
+</select>
+
+<label>Onderwerp (1 per regel)</label>
+
+<textarea id="promptTopic"></textarea>
+
+<button onclick="generatePrompt()">Genereer Prompt</button>
+
+<textarea id="promptResult"></textarea>
+
+</div>
+
+
+<!-- THUMBNAIL ANALYZER -->
+
+<div id="thumbnail" class="tool-section">
+
+<h2>YouTube Thumbnail Analyzer</h2>
+
+<input type="file" id="thumbFile">
+
+<input type="text" id="thumbText" placeholder="Overlay tekst">
+
+<canvas id="thumbCanvas"></canvas>
+
+<div id="thumbAnalysis"></div>
+
+</div>
+
+
+<!-- BATCH FORMATTER -->
+
+<div id="batch" class="tool-section">
+
+<h2>Batch File Formatter / Cleaner</h2>
+
+<input type="file" id="batchFile">
+
+<textarea id="preview" rows="14"></textarea>
+
+<input type="text" id="regexSearch" placeholder="Regex zoeken">
+
+<input type="text" id="regexReplace" placeholder="Vervangen door">
+
+<button id="applyRegex">Regex toepassen</button>
+
+<button id="downloadFile">Download bestand</button>
+
+</div>
+
+
+<!-- BACKGROUND REMOVER -->
+
+<div id="bgremover" class="tool-section">
+
+<h2>Advanced Image Background Remover</h2>
+
+<input type="file" id="bgFile">
+
+<canvas id="bgCanvas"></canvas>
+
+<button id="removeBG">Verwijder achtergrond</button>
+
+</div>
+
+
+<!-- QR CODE -->
+
+<div id="qr" class="tool-section">
+
+<h2>Custom QR Code Designer</h2>
+
+<input type="text" id="qrText" placeholder="Tekst of URL">
+
+<label>Kleur QR</label>
+<input type="color" id="qrColor" value="#000000">
+
+<label>Achtergrondkleur</label>
+<input type="color" id="qrBgColor" value="#ffffff">
+
+<label>Grootte</label>
+<select id="qrSize">
+<option value="150">150</option>
+<option value="200">200</option>
+<option value="300">300</option>
+<option value="400">400</option>
+</select>
+
+<button onclick="generateQR()">Genereer QR Code</button>
+
+<div id="qrCode"></div>
+
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<script>
+
+document.querySelectorAll(".tool-button").forEach(btn=>{
+btn.onclick=()=>{
+document.querySelectorAll(".tool-section").forEach(s=>s.style.display="none")
+document.getElementById(btn.dataset.target).style.display="block"
+}
+})
+
+
+function generatePrompt(){
+
+let model=document.getElementById("aiModel").value
+let type=document.getElementById("contentType").value
+let topic=document.getElementById("promptTopic").value
+
+let prompt="Schrijf een "+type+" over:\n"+topic+"\nGeoptimaliseerd voor "+model
+
+document.getElementById("promptResult").value=prompt
+
+}
+
+
+
+let thumbImg=null
+const canvas=document.getElementById("thumbCanvas")
+const ctx=canvas.getContext("2d")
+
+document.getElementById("thumbFile").onchange=e=>{
+
+const file=e.target.files[0]
+
+thumbImg=new Image()
+
+thumbImg.onload=()=>{
+
+canvas.width=thumbImg.width
+canvas.height=thumbImg.height
+
+ctx.drawImage(thumbImg,0,0)
+
+analyzeThumbnail()
+
+}
+
+thumbImg.src=URL.createObjectURL(file)
+
+}
+
+document.getElementById("thumbText").oninput=()=>{
+
+if(!thumbImg)return
+
+ctx.clearRect(0,0,canvas.width,canvas.height)
+
+ctx.drawImage(thumbImg,0,0)
+
+ctx.font="bold 48px Arial"
+ctx.fillStyle="white"
+ctx.strokeStyle="black"
+ctx.lineWidth=4
+
+const text=document.getElementById("thumbText").value
+
+ctx.strokeText(text,40,70)
+ctx.fillText(text,40,70)
+
+analyzeThumbnail()
+
+}
+
+function analyzeThumbnail(){
+
+const data=ctx.getImageData(0,0,canvas.width,canvas.height).data
+
+let r=0,g=0,b=0
+
+for(let i=0;i<data.length;i+=4){
+
+r+=data[i]
+g+=data[i+1]
+b+=data[i+2]
+
+}
+
+const pixels=data.length/4
+
+r=Math.round(r/pixels)
+g=Math.round(g/pixels)
+b=Math.round(b/pixels)
+
+const brightness=Math.round((r+g+b)/3)
+
+let advice=""
+
+if(brightness<90) advice="Thumbnail vrij donker - gebruik lichtere tekst"
+else if(brightness>180) advice="Thumbnail vrij licht - gebruik donkere tekst"
+else advice="Contrast is goed"
+
+document.getElementById("thumbAnalysis").innerHTML=
+"Gemiddelde kleur RGB("+r+","+g+","+b+")<br>Helderheid: "+brightness+"/255<br>"+advice
+
+}
+
+
+
+let currentText=""
+
+document.getElementById("batchFile").onchange=e=>{
+
+const reader=new FileReader()
+
+reader.onload=event=>{
+
+currentText=autoClean(event.target.result)
+
+document.getElementById("preview").value=currentText
+
+}
+
+reader.readAsText(e.target.files[0])
+
+}
+
+function autoClean(text){
+
+text=text.replace(/\r\n/g,"\n")
+text=text.replace(/\t/g," ")
+text=text.replace(/[ \t]+$/gm,"")
+text=text.replace(/ {2,}/g," ")
+text=text.replace(/\n{3,}/g,"\n\n")
+
+try{
+const obj=JSON.parse(text)
+text=JSON.stringify(obj,null,4)
+}catch(e){}
+
+text=text.replace(/ *, */g,",")
+
+return text.trim()
+
+}
+
+document.getElementById("applyRegex").onclick=()=>{
+
+const search=document.getElementById("regexSearch").value
+const replace=document.getElementById("regexReplace").value
+
+const regex=new RegExp(search,"g")
+
+currentText=currentText.replace(regex,replace)
+
+document.getElementById("preview").value=currentText
+
+}
+
+document.getElementById("downloadFile").onclick=()=>{
+
+const blob=new Blob([currentText])
+
+const a=document.createElement("a")
+
+a.href=URL.createObjectURL(blob)
+
+a.download="cleaned_file.txt"
+
+a.click()
+
+}
+
+
+
+const bgCanvas=document.getElementById("bgCanvas")
+const bgCtx=bgCanvas.getContext("2d")
+
+document.getElementById("bgFile").onchange=e=>{
+
+const img=new Image()
+
+img.onload=()=>{
+
+bgCanvas.width=img.width
+bgCanvas.height=img.height
+
+bgCtx.drawImage(img,0,0)
+
+}
+
+img.src=URL.createObjectURL(e.target.files[0])
+
+}
+
+document.getElementById("removeBG").onclick=async()=>{
+
+const file=document.getElementById("bgFile").files[0]
+
+const form=new FormData()
+
+form.append("image_file",file)
+
+const res=await fetch(
+
+"https://api.remove.bg/v1.0/removebg",
+
+{
+method:"POST",
+headers:{"X-Api-Key":"AimXWNzWnLUJjfLirrhZnkCd"},
+body:form
+}
+
+)
+
+const blob=await res.blob()
+
+const img=new Image()
+
+img.onload=()=>{
+
+bgCanvas.width=img.width
+bgCanvas.height=img.height
+
+bgCtx.drawImage(img,0,0)
+
+}
+
+img.src=URL.createObjectURL(blob)
+
+}
+
+
+
+function generateQR(){
+
+const text=document.getElementById("qrText").value
+const color=document.getElementById("qrColor").value
+const bg=document.getElementById("qrBgColor").value
+const size=parseInt(document.getElementById("qrSize").value)
+
+const container=document.getElementById("qrCode")
+
+container.innerHTML=""
+
+new QRCode(container,{
+text:text,
+width:size,
+height:size,
+colorDark:color,
+colorLight:bg
+})
+
+}
+
+</script>
+
+</body>
+</html>
