@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PeterSupportHub</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color:#f4f4f4; color:#333; }
+a { text-decoration:none; }
+header { position: relative; width: 100%; height: 300px; background: url('banner.jpg') center/contain no-repeat; display: flex; align-items: center; justify-content: center; color: white; overflow: hidden;}
+header::after { content: ''; position: absolute; top:0; left:0; width:100%; height:100%; background-color: rgba(0,0,0,0.2);}
+header h1 { position: relative; font-size:2.5rem; z-index:1; text-shadow:2px 2px 10px rgba(0,0,0,0.6); opacity:0; transform:translateY(-30px); animation:slideFadeIn 1s forwards 0.3s; text-align:center;}
+.logo-container { display:flex; justify-content:center; margin:-40px 0 40px 0; }
+.logo-container img { max-height:180px; width:auto; transition: transform 0.3s ease; opacity:0; transform:translateY(30px); animation:slideFadeIn 1s forwards 0.6s;}
+.logo-container img:hover { transform: scale(1.1);}
+nav { display:flex; justify-content:center; gap:15px; padding:0 20px 20px 20px; flex-wrap: nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch;}
+.button { flex:0 0 auto; white-space:nowrap; display:flex; align-items:center; justify-content:center; padding:15px 25px; font-size:1.2rem; color:white; background:linear-gradient(135deg,#1abc9c,#16a085); border:none; border-radius:12px; box-shadow:0 6px 15px rgba(0,0,0,0.2); transition: all 0.3s ease, transform 0.2s ease; cursor:pointer; text-align:center; opacity:0; transform:translateY(20px); animation:slideFadeIn 0.8s forwards;}
+.button:hover { background:linear-gradient(135deg,#16a085,#1abc9c); transform:translateY(-5px); box-shadow:0 10px 20px rgba(0,0,0,0.3);}
+.tool-button { display:block; width:80%; max-width:400px; margin:15px auto; padding:18px; font-size:1.2rem; font-weight:bold; color:white; background:linear-gradient(135deg,#e67e22,#d35400); border:none; border-radius:15px; cursor:pointer; text-align:center; box-shadow:0 8px 20px rgba(0,0,0,0.3); transition:0.3s;}
+.tool-button:hover { transform:translateY(-3px); box-shadow:0 12px 25px rgba(0,0,0,0.4);}
+.tool-section { padding:30px 20px; max-width:900px; margin:20px auto; background-color:#fff; border-radius:12px; box-shadow:0 6px 15px rgba(0,0,0,0.1); display:none;}
+.ai-prompt-generator h2 { text-align:center; margin-bottom:20px; color:#16a085;}
+#prompt-preview { padding:15px; border-radius:12px; border:1px solid #ccc; min-height:200px; font-family:monospace; font-size:1rem; background-color:#f9f9f9; white-space: pre-wrap;}
+footer { background-color:#2c3e50; color:white; padding:20px; text-align:center; font-size:0.9rem; opacity:0; transform:translateY(40px); transition:all 1s ease-out;}
+footer.visible { opacity:1; transform:translateY(0);}
+@keyframes slideFadeIn {0%{opacity:0; transform:translateY(30px);}100%{opacity:1; transform:translateY(0);}}
+@media(max-width:768px){ header h1{ font-size:2.2rem; padding:0 20px; } .logo-container img{ max-height:140px; } .tool-button{ width:90%; font-size:1.1rem; }}
+@media(max-width:480px){ header{ height:250px; } .button{ font-size:1rem; padding:15px; }}
+</style>
+</head>
+<body>
+
+<header id="banner"><h1>PeterSupportHub</h1></header>
+<div class="logo-container"><img src="logo.jpg" alt="Site Logo"></div>
+
+<nav>
+    <a class="button" href="https://www.teamviewer.com/nl/solutions/use-cases/quicksupport/" target="_blank">TeamViewer QuickSupport</a>
+    <a class="button" href="https://remotedesktop.google.com/support/" target="_blank">Chrome Remote Desktop Support</a>
+    <a class="button" href="https://e.pcloud.link/publink/show?code=kZU3JNZ9oWr3FxCbTSHQKHQXGj2JbOFVgYV" target="_blank">pCloud DOWNLOADZONE</a>
+    <a class="button" href="https://e.pcloud.link/publink/show?code=kZJ9MAZ3mOqvfUaYYzYM2Kd0ajnmY2uRF0V" target="_blank">pCloud Software bestanden</a>
+    <a class="button" href="mailto:debackerpeter@gmail.com">E-mail to Gmail</a>
+</nav>
+
+<button class="tool-button" data-target="ai-prompt-generator">Open AI Prompt Generator</button>
+<button class="tool-button" data-target="image-bg-remover">Advanced Image Background Remover</button>
+<button class="tool-button" data-target="youtube-thumbnail-analyzer">YouTube Thumbnail Analyzer</button>
+<button class="tool-button" data-target="batch-file-formatter">Batch File Formatter / Cleaner</button>
+<button class="tool-button" data-target="custom-qr-designer">Custom QR Code Designer</button>
+
+<!-- AI Prompt Generator -->
+<div id="ai-prompt-generator" class="tool-section ai-prompt-generator">
+<h2>AI Prompt Generator (Premium)</h2>
+<select id="ai-model">
+    <option value="chatgpt">ChatGPT</option>
+    <option value="gpt4">GPT-4 Turbo</option>
+    <option value="dalle">DALL·E</option>
+    <option value="midjourney">MidJourney</option>
+    <option value="stable">Stable Diffusion</option>
+</select>
+<select id="content-type">
+    <option value="blog">Blog</option>
+    <option value="socialmedia">Social Media</option>
+    <option value="artwork">Artwork</option>
+</select>
+<textarea id="topic" placeholder="Één onderwerp per regel"></textarea>
+<button id="generate-prompt">Genereer Prompts</button>
+<div id="prompt-preview"></div>
+<textarea id="prompt-output" readonly></textarea>
+<button id="copy-prompt">Kopieer</button>
+<button id="export-csv">Export CSV</button>
+<button id="export-txt">Export TXT</button>
+</div>
+
+<!-- Image Background Remover -->
+<div id="image-bg-remover" class="tool-section">
+<h2>Advanced Image Background Remover</h2>
+<input type="file" id="bg-file" accept="image/*">
+<canvas id="bg-canvas" style="max-width:100%; margin-top:15px;"></canvas>
+</div>
+
+<!-- YouTube Thumbnail Analyzer -->
+<div id="youtube-thumbnail-analyzer" class="tool-section">
+<h2>YouTube Thumbnail Analyzer</h2>
+<input type="file" id="thumb-file" accept="image/*"><br><br>
+<input type="text" id="thumb-text" placeholder="Voorbeeld tekst overlay" style="width:60%; padding:5px;">
+<canvas id="thumb-canvas" style="max-width:100%; margin-top:15px;"></canvas>
+<div id="thumb-analysis" style="margin-top:10px;"></div>
+<div id="thumb-overlay" style="position:relative; max-width:100%; margin-top:-250px; text-align:center; pointer-events:none;"></div>
+</div>
+
+<!-- Batch File Formatter -->
+<div id="batch-file-formatter" class="tool-section">
+<h2>Batch File Formatter / Cleaner</h2>
+<input type="file" id="batch-file" multiple>
+<pre id="batch-output" style="background:#f4f4f4; padding:15px; margin-top:15px; overflow-x:auto;"></pre>
+</div>
+
+<!-- Custom QR Code Designer -->
+<div id="custom-qr-designer" class="tool-section">
+<h2>Custom QR Code Designer</h2>
+<input type="text" id="qr-text" placeholder="Inhoud QR code">
+<input type="color" id="qr-color" value="#000000">
+<button id="generate-qr">Genereer QR Code</button>
+<div id="qr-result" style="margin-top:15px;"></div>
+</div>
+
+<footer id="site-footer">
+    <p>© 2026 PeterSupportHub. Alle rechten voorbehouden.</p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', ()=>{
+    // Parallax banner
+    const banner=document.getElementById('banner');
+    window.addEventListener('scroll',()=>{banner.style.backgroundPositionY=window.scrollY*0.5+'px';});
+
+    // Footer
+    const footer=document.getElementById('site-footer');
+    const observer=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){footer.classList.add('visible'); observer.unobserve(footer);}});},{threshold:0.2});
+    observer.observe(footer);
+
+    // Tool buttons
+    document.querySelectorAll('.tool-button').forEach(btn=>{
+        btn.addEventListener('click',()=>{
+            const target=btn.dataset.target;
+            document.querySelectorAll('.tool-section').forEach(s=>s.style.display='none');
+            document.getElementById(target).style.display='block';
+            window.scrollTo({top:document.getElementById(target).offsetTop-50, behavior:'smooth'});
+        });
+    });
+
+    // AI Prompt Generator
+    const topicInput=document.getElementById('topic');
+    const preview=document.getElementById('prompt-preview');
+    const output=document.getElementById('prompt-output');
+    function generatePrompt(type,topic,model){return `Prompt voor ${type}: "${topic}" [Model: ${model}]`;}
+    function updatePrompts(){
+        const type=document.getElementById('content-type').value;
+        const model=document.getElementById('ai-model').value;
+        const topics=topicInput.value.split('\n').filter(t=>t.trim()!=='');
+        const prompts=topics.map(t=>generatePrompt(type,t,model));
+        preview.textContent=prompts.join("\n\n---\n\n");
+        output.value=preview.textContent;
+    }
+    topicInput.addEventListener('input',updatePrompts);
+    document.getElementById('generate-prompt').addEventListener('click',updatePrompts);
+    document.getElementById('copy-prompt').addEventListener('click',()=>{navigator.clipboard.writeText(output.value); alert('Gekopieerd!');});
+    document.getElementById('export-csv').addEventListener('click',()=>{if(!output.value) return; const lines=output.value.split("\n\n---\n\n").map(l=>`"${l.replace(/"/g,'""')}"`); const csv="data:text/csv;charset=utf-8,"+lines.join("\n"); const a=document.createElement('a'); a.href=encodeURI(csv); a.download='ai_prompts.csv'; document.body.appendChild(a); a.click(); document.body.removeChild(a);});
+    document.getElementById('export-txt').addEventListener('click',()=>{if(!output.value) return; const blob=new Blob([output.value],{type:"text/plain"}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='ai_prompts.txt'; document.body.appendChild(a); a.click(); document.body.removeChild(a);});
+
+    // Advanced Image Background Remover
+    const bgFile=document.getElementById('bg-file');
+    const bgCanvas=document.getElementById('bg-canvas');
+    const bgCtx=bgCanvas.getContext('2d');
+    bgFile.addEventListener('change',e=>{
+        const file=e.target.files[0];
+        if(!file) return;
+        const img=new Image();
+        img.onload=function(){
+            bgCanvas.width=img.width; bgCanvas.height=img.height;
+            bgCtx.clearRect(0,0,bgCanvas.width,bgCanvas.height);
+            bgCtx.drawImage(img,0,0);
+            const data=bgCtx.getImageData(0,0,bgCanvas.width,bgCanvas.height);
+            for(let i=0;i<data.data.length;i+=4){
+                if(data.data[i]>240 && data.data[i+1]>240 && data.data[i+2]>240) data.data[i+3]=0;
+            }
+            bgCtx.putImageData(data,0,0);
+        }
+        img.src = URL.createObjectURL(file);
+    });
+
+    // YouTube Thumbnail Analyzer + live overlay
+    const thumbFile=document.getElementById('thumb-file');
+    const thumbCanvas=document.getElementById('thumb-canvas');
+    const thumbCtx=thumbCanvas.getContext('2d');
+    const thumbAnalysis=document.getElementById('thumb-analysis');
+    const thumbText=document.getElementById('thumb-text');
+    const thumbOverlay=document.getElementById('thumb-overlay');
+    let lum = 0;
+
+    thumbFile.addEventListener('change', e => {
+        const file = e.target.files[0];
+        if(!file) return;
+        const img = new Image();
+        img.onload = function(){
+            thumbCanvas.width = img.width;
+            thumbCanvas.height = img.height;
+            thumbCtx.clearRect(0,0,thumbCanvas.width,thumbCanvas.height);
+            thumbCtx.drawImage(img,0,0);
+
+            const data = thumbCtx.getImageData(0,0,thumbCanvas.width,thumbCanvas.height);
+            let r=0,g=0,b=0;
+            lum = 0;
+            for(let i=0;i<data.data.length;i+=4){
+                r+=data.data[i]; g+=data.data[i+1]; b+=data.data[i+2];
+                lum+=0.2126*data.data[i]+0.7152*data.data[i+1]+0.0722*data.data[i+2];
+            }
+            const px=data.data.length/4;
+            r=Math.round(r/px); g=Math.round(g/px); b=Math.round(b/px); lum=lum/px;
+
+            let contrastMsg='';
+            if(lum<60) contrastMsg='<span style="color:red;">Waarschuwing: te donker → tekst mogelijk slecht leesbaar</span>';
+            else if(lum>200) contrastMsg='<span style="color:red;">Waarschuwing: te licht → tekst mogelijk slecht leesbaar</span>';
+            else contrastMsg='<span style="color:green;">Contrast OK → tekst goed leesbaar</span>';
+
+            thumbAnalysis.innerHTML=`Gemiddelde kleur: rgb(${r},${g},${b})<br>Luminantie: ${Math.round(lum)}<br>${contrastMsg}`;
+
+            updateOverlay();
+        }
+        img.src = URL.createObjectURL(file);
+    });
+
+    thumbText.addEventListener('input', updateOverlay);
+    function updateOverlay(){
+        thumbOverlay.innerHTML = '';
+        if(!thumbText.value) return;
+        const span=document.createElement('span');
+        span.textContent = thumbText.value;
+        span.style.position='absolute';
+        span.style.top='50%';
+        span.style.left='50%';
+        span.style.transform='translate(-50%, -50%)';
+        span.style.fontSize='32px';
+        span.style.fontWeight='bold';
+        span.style.color = (lum<60 || lum>200)? 'red':'lime';
+        span.style.textShadow='2px 2px 5px rgba(0,0,0,0.7)';
+        thumbOverlay.style.width = thumbCanvas.width+'px';
+        thumbOverlay.style.height = thumbCanvas.height+'px';
+        thumbOverlay.appendChild(span);
+    }
+
+    // Batch File Formatter
+    const batchFile=document.getElementById('batch-file');
+    const batchOutput=document.getElementById('batch-output');
+    batchFile.addEventListener('change',e=>{
+        const files=e.target.files;
+        batchOutput.textContent='';
+        Array.from(files).forEach(file=>{
+            const reader=new FileReader();
+            reader.onload=function(ev){
+                let content=ev.target.result.replace(/\s+$/gm,'');
+                try{ const json=JSON.parse(content); content=JSON.stringify(json,null,2);}catch{}
+                batchOutput.textContent+=`--- ${file.name} ---\n${content}\n\n`;
+            }
+            reader.readAsText(file);
+        });
+    });
+
+    // QR Code Designer
+    const qrBtn=document.getElementById('generate-qr');
+    const qrText=document.getElementById('qr-text');
+    const qrColor=document.getElementById('qr-color');
+    const qrResult=document.getElementById('qr-result');
+    qrBtn.addEventListener('click',()=>{
+        qrResult.innerHTML='';
+        new QRCode(qrResult,{text:qrText.value, width:200, height:200, colorDark:qrColor.value, colorLight:"#ffffff"});
+    });
+});
+</script>
+</body>
+</html>
